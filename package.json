@@ -1,0 +1,15 @@
+{
+  "name": "bot-boilerplate",
+  "version": "1.0.0",
+  "description": "a boilerplate for future automation projects",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "puppeteer": "^20.9.0"
+  }
+}
