@@ -10,7 +10,7 @@ import puppeteer from "puppeteer";
   // Navigate the page to a URL
   await page.goto("https://developer.chrome.com/");
 
-  page.setDefaultTimeout(180_000);
+  // page.setDefaultTimeout(180_000);
 
   // Set screen size
   await page.setViewport({ width: 1080, height: 1024 });
