@@ -1,83 +1,36 @@
 import puppeteer from "puppeteer";
-import nodemailer from "nodemailer";
-import dados from "./credentials.json" assert { type: "json" };
-import "dotenv/config";
 
 (async () => {
+  // Launch the browser and open a new blank page
   const browser = await puppeteer.launch({
-    // headless: false,
-    // slowMo: 100,
+    headless: false,
   });
   const page = await browser.newPage();
 
-  await page.setExtraHTTPHeaders({ "Cache-Control": "no-cache" });
-
   // Navigate the page to a URL
-  await page.goto("https://meutim.tim.com.br/novo/login");
-  await page.waitForNavigation();
+  await page.goto("https://developer.chrome.com/");
 
-  page.setDefaultTimeout(180_000);
+  // page.setDefaultTimeout(180_000);
 
   // Set screen size
   await page.setViewport({ width: 1080, height: 1024 });
 
+  // Type into search box
+  await page.type(".search-box__input", "automate beyond recorder");
+
   // Wait and click on first result
-  const inputNumero = await page.$("#campo-numero");
-  const inputSenha = await page.$("#campo-senha");
-  const btnEntrar = "#btn-entrar";
+  const searchResultSelector = ".search-box__link";
+  await page.waitForSelector(searchResultSelector);
+  await page.click(searchResultSelector);
 
-  await inputNumero.type(dados.numero, { delay: 50 });
-  await inputSenha.type(dados.senha, { delay: 50 });
-  await page.click(btnEntrar);
+  // Locate the full title with a unique string
+  const textSelector = await page.waitForSelector(
+    "text/Customize and automate"
+  );
+  const fullTitle = await textSelector?.evaluate((el) => el.textContent);
 
-  await extractPDF(page);
+  // Print the full title
+  console.log('The title of this blog post is "%s".', fullTitle);
 
   await browser.close();
 })();
-
-async function extractPDF(page) {
-  await page.waitForTimeout(10_000);
-  const btnPagarFatura = "button[title='Pagar agora']";
-
-  // ".status-em-aberto .view-pdf";   button[title='Pagar agora'] button.btn-grito.btn-small.btn-verde
-
-  await page.click(btnPagarFatura);
-
-  await sendInfo(page);
-}
-
-async function sendInfo(page) {
-  await page.waitForTimeout(10_000);
-
-  const codigoDeBarras = await page.$eval(
-    ".code-bar",
-    (element) => element.textContent
-  );
-
-  const transporter = nodemailer.createTransport({
-    host: "smtp.office365.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.EMAIL1,
-      pass: process.env.SENHAEMAIL1,
-    },
-  });
-
-  const message = {
-    from: `Gabriel Simplicio <${process.env.EMAIL1}>`,
-    to: process.env.EMAIL2,
-    subject: "Código de barras extrato Meu TIM",
-    text: `Código de barras da conta desse mês:
-
-    ${codigoDeBarras}`,
-  };
-
-  return transporter.sendMail(message, (err, info) => {
-    if (err) {
-      console.log("Erro ao enviar o e-mail:", err);
-    } else {
-      console.log("E-mail enviado:", info.response);
-    }
-  });
-}
