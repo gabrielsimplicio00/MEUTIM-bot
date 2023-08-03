@@ -11,7 +11,7 @@ const port = 3333;
 app.get("/", () => main());
 
 // (0 10 1 * *) -> executa sempre as 10 da manhã, no primeiro dia de cada mes
-cron.schedule("*/2 * * * *", async () => {
+cron.schedule("0 10 1 * *", async () => {
   try {
     await axios.get(`http://localhost:${port}/`);
   } catch (error) {
