@@ -3,7 +3,7 @@ import nodemailer from "nodemailer";
 import cron from "node-cron";
 import "dotenv/config";
 
-cron.schedule("* * * * *", () => main()); // 0 10 1 * *
+cron.schedule("*/3 * * * *", () => main()); // 0 10 1 * *
 
 async function main() {
   try {
