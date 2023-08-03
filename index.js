@@ -1,7 +1,6 @@
 import puppeteer from "puppeteer";
 import nodemailer from "nodemailer";
 import cron from "node-cron";
-import dados from "./credentials.json" assert { type: "json" };
 import "dotenv/config";
 
 cron.schedule("* * * * *", () => main()); // 0 10 1 * *
@@ -30,8 +29,8 @@ async function main() {
     const inputSenha = await page.$("#campo-senha");
     const btnEntrar = "#btn-entrar";
 
-    await inputNumero.type(dados.numero, { delay: 50 });
-    await inputSenha.type(dados.senha, { delay: 50 });
+    await inputNumero.type(process.env.NUMERO, { delay: 50 });
+    await inputSenha.type(process.env.SENHA, { delay: 50 });
     await page.click(btnEntrar);
 
     await getFatura(page);
