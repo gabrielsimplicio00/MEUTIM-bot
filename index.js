@@ -8,6 +8,7 @@ import "dotenv/config";
 const app = express();
 const port = 3333;
 
+app.get("/", (req, res) => res.send("Hello World!"));
 app.get("/bot", () => main());
 
 // (0 10 1 * *) -> executa sempre as 10 da manhã, no primeiro dia de cada mes
