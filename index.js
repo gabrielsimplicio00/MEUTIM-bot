@@ -3,7 +3,7 @@ import nodemailer from "nodemailer";
 import cron from "node-cron";
 import "dotenv/config";
 
-cron.schedule("*/3 * * * *", () => main()); // 0 10 1 * *
+cron.schedule("0 10 1 * *", () => main()); // (0 10 1 * *) -> executa sempre as 10 da manhã, no primeiro dia de cada mes
 
 async function main() {
   try {
@@ -14,12 +14,12 @@ async function main() {
     const page = await browser.newPage();
 
     await page.setExtraHTTPHeaders({ "Cache-Control": "no-cache" });
+    page.setDefaultTimeout(210_000);
+    page.setDefaultNavigationTimeout(90_000);
 
     // Navigate the page to a URL
     await page.goto("https://meutim.tim.com.br/novo/login");
     await page.waitForNavigation();
-
-    await page.setDefaultTimeout(180_000);
 
     // Set screen size
     await page.setViewport({ width: 1080, height: 1024 });
@@ -75,7 +75,7 @@ async function sendMailWithContent(page) {
 
   const message = {
     from: `Gabriel Simplicio <${process.env.EMAIL1}>`,
-    to: process.env.EMAIL1,
+    to: `${process.env.EMAIL1}, ${process.env.EMAIL2}`,
     subject: "Código de barras extrato Meu TIM",
     text: `Código de barras do extrato desse mês:
 
