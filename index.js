@@ -1,9 +1,23 @@
 import puppeteer from "puppeteer";
 import nodemailer from "nodemailer";
 import cron from "node-cron";
+import express from "express";
+import axios from "axios";
 import "dotenv/config";
 
-cron.schedule("0 10 1 * *", () => main()); // (0 10 1 * *) -> executa sempre as 10 da manhã, no primeiro dia de cada mes
+const app = express();
+const port = 3333;
+
+app.get("/", () => main());
+
+// (0 10 1 * *) -> executa sempre as 10 da manhã, no primeiro dia de cada mes
+cron.schedule("*/2 * * * *", async () => {
+  try {
+    await axios.get(`http://localhost:${port}/`);
+  } catch (error) {
+    console.error("Erro na requisição:", error.message);
+  }
+});
 
 async function main() {
   try {
@@ -15,7 +29,7 @@ async function main() {
 
     await page.setExtraHTTPHeaders({ "Cache-Control": "no-cache" });
     page.setDefaultTimeout(210_000);
-    page.setDefaultNavigationTimeout(90_000);
+    page.setDefaultNavigationTimeout(60_000);
 
     // Navigate the page to a URL
     await page.goto("https://meutim.tim.com.br/novo/login");
@@ -75,7 +89,7 @@ async function sendMailWithContent(page) {
 
   const message = {
     from: `Gabriel Simplicio <${process.env.EMAIL1}>`,
-    to: `${process.env.EMAIL1}, ${process.env.EMAIL2}`,
+    to: `${process.env.EMAIL2}`,
     subject: "Código de barras extrato Meu TIM",
     text: `Código de barras do extrato desse mês:
 
@@ -90,3 +104,7 @@ async function sendMailWithContent(page) {
     }
   });
 }
+
+app.listen(port, () => {
+  console.log(`Servidor Express rodando na porta ${port}`);
+});
