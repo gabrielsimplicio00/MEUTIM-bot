@@ -19,7 +19,7 @@ async function main() {
     await page.goto("https://meutim.tim.com.br/novo/login");
     await page.waitForNavigation();
 
-    page.setDefaultTimeout(180_000);
+    await page.setDefaultTimeout(180_000);
 
     // Set screen size
     await page.setViewport({ width: 1080, height: 1024 });
