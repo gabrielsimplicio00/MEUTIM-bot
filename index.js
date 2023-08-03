@@ -8,12 +8,12 @@ import "dotenv/config";
 const app = express();
 const port = 3333;
 
-app.get("/", () => main());
+app.get("/bot", () => main());
 
 // (0 10 1 * *) -> executa sempre as 10 da manhã, no primeiro dia de cada mes
 cron.schedule("0 10 1 * *", async () => {
   try {
-    await axios.get(`http://localhost:${port}/`);
+    await axios.get(`http://localhost:${port}/bot`);
   } catch (error) {
     console.error("Erro na requisição:", error.message);
   }
