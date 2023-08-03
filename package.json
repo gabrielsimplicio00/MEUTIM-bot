@@ -1,7 +1,7 @@
 {
-  "name": "bot-boilerplate",
+  "name": "meu-tim-bot",
   "version": "1.0.0",
-  "description": "a boilerplate for future automation projects",
+  "description": "a bot made for extract an invoice code and send it to an email",
   "main": "index.js",
   "type": "module",
   "scripts": {
