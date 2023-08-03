@@ -90,7 +90,7 @@ async function sendMailWithContent(page) {
 
   const message = {
     from: `Gabriel Simplicio <${process.env.EMAIL1}>`,
-    to: `${process.env.EMAIL2}`,
+    to: `${process.env.EMAIL1}, ${process.env.EMAIL2}`,
     subject: "Código de barras extrato Meu TIM",
     text: `Código de barras do extrato desse mês:
 
