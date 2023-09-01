@@ -12,9 +12,9 @@ app.get("/", (req, res) => res.send("Hello World!"));
 app.get("/bot", () => main());
 
 // (0 10 1 * *) -> executa sempre as 10 da manhã, no primeiro dia de cada mes
-cron.schedule("0 10 1 * *", async () => {
+cron.schedule("40 12 1 * *", async () => {
   try {
-    await axios.get(`https://meu-tim-bot.onrender.com//bot`);
+    await axios.get(`https://meu-tim-bot.onrender.com/bot`);
   } catch (error) {
     console.error("Erro na requisição:", error.message);
   }
