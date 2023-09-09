@@ -57,7 +57,7 @@ async function main() {
     console.log("Login efetuado com sucesso!");
     console.log("------------------------------------------------------------");
 
-    await getFatura(page);
+    await getFatura(page, browser);
 
     await browser.close();
   } catch (error) {
@@ -68,13 +68,19 @@ async function main() {
 }
 // main();
 
-async function getFatura(page) {
+async function getFatura(page, browser) {
   // page.setDefaultNavigationTimeout(60_000);
   await page.waitForTimeout(5_000);
 
   const btnPagarFatura = await page.waitForSelector(
     "button[title='Pagar agora']"
   );
+
+  if (btnPagarFatura === null) {
+    console.log("Fatura em aberto não encontrada, provavelmente já está paga");
+    await browser.close();
+    return 0;
+  }
 
   await btnPagarFatura.click();
 
